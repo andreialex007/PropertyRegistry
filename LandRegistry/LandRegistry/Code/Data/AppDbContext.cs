@@ -18,7 +18,7 @@ namespace LandRegistry.Code.Data
         }
 
         public DbSet<Land> Lands { get; set; }
-        public DbSet<Land> LandRightType { get; set; }
-        public DbSet<Land> LandType { get; set; }
+        public DbSet<LandRightType> LandRightType { get; set; }
+        public DbSet<LandType> LandType { get; set; }
     }
 }

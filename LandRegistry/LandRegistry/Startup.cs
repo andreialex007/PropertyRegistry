@@ -56,10 +56,21 @@ namespace LandRegistry
                 db.Database.Migrate();
                 if (!db.LandRightType.Any())
                 {
-                    db.LandRightType.Add(new LandRightType());
-                    // db.SaveChanges();
+                    db.LandRightType.Add(new LandRightType { Name = "Собственность" });
+                    db.LandRightType.Add(new LandRightType { Name = "Пожизненное наследуемое владение" });
+                    db.LandRightType.Add(new LandRightType { Name = "Постоянное (бессрочное)пользование" });
+                    db.LandRightType.Add(new LandRightType { Name = "Аренда" });
+                    db.LandRightType.Add(new LandRightType { Name = "Оперативное управление" });
+                    db.SaveChanges();
                 }
 
+                if (!db.LandType.Any())
+                {
+                    db.LandType.Add(new LandType { Name = "Земельный участок" });
+                    db.LandType.Add(new LandType { Name = "Единое землепользование" });
+                    db.LandType.Add(new LandType { Name = "Часть земельного участка" });
+                    db.SaveChanges();
+                }
             }
 
             services.Configure<RequestLocalizationOptions>(options =>

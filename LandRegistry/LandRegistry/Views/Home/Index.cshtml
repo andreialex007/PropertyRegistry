@@ -124,13 +124,17 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Тип земельного участка</label>
-                                <select class="form-control"></select>
+                                <select class="form-control">
+                                    <option value="">Не указан</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Вид права Общества на земельный участок</label>
-                                <select class="form-control"></select>
+                                <select class="form-control">
+                                    <option value="">Не указан</option>
+                                </select>
                             </div>
                         </div>
 
@@ -140,9 +144,19 @@
                         <div class="col">
                             <div class="form-group">
                                 <div>
-                                    <label class="custom-file-upload">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-secondary">
+                                            <i class="fas fa-file"></i>
+                                            MyFileName.docx
+                                        </button>
+                                        <button type="button" class="btn btn-dark">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                    <label class="custom-file-upload btn btn-primary mb-0">
                                         <input type="file" />
-                                        Custom Upload
+                                        <i class="fas fa-upload"></i>
+                                        Прикрепить файл
                                     </label>
                                 </div>
                             </div>
@@ -151,7 +165,10 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Редактировать</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-edit"></i>
+                        Редактировать
+                    </button>
                 </div>
             </div>
         </div>

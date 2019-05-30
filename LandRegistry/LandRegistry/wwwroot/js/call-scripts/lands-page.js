@@ -1,13 +1,34 @@
 ﻿$(function () {
 
+    let hasStoredConfig = !!localStorage.landsListColumnsConfig;
+
     window.landsPage = new Vue({
         el: ".lands-page",
         data: function () {
             return {
-                selectedQuestionId: null
+                items: [],
+                totalRecords: 0,
+                filteredRecords: 0,
+                config: hasStoredConfig ? JSON.parse(localStorage.landsListColumnsConfig) : {
+                    skip: 0,
+                    take: 50
+                }
             }
         },
         methods: {
+            async search(reset) {
+
+                var params = {};
+
+                let result = await $.ajax({
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(params),
+                    url: "/Home/Search"
+                });
+
+
+            }
         },
         computed: {
         },

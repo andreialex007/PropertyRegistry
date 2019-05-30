@@ -17,6 +17,9 @@
             }
         },
         methods: {
+            newLand() {
+                editLandModal.open(0);
+            },
             changePage(pageNumber) {
                 this.config.skip = (pageNumber - 1) * this.config.take;
                 this.search();
@@ -61,11 +64,48 @@
         }
     });
 
+    window.editLandModal = new Vue({
+        el: ".edit-land-modal",
+        data: function () {
+            return {
+                visible: false,
+                landId: 0,
+                entity: {
+
+                }
+            }
+        },
+        methods: {
+            changePage(pageNumber) {
+
+            },
+            async search(reset) {
+
+            },
+            open(landId) {
+
+
+
+                this.landId = landId;
+                this.visible = true;
+            },
+            close() {
+                this.visible = false;
+            },
+            save() {
+                this.close();
+            }
+        },
+        watch: {
+
+        },
+        computed: {
+
+        },
+        async mounted() {
+
+        }
+    });
+
 });
 
-window.initMap = function () {
-    window.map = new google.maps.Map(document.getElementById('map-placeholder'), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8
-    });
-};

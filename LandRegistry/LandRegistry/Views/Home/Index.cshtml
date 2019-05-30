@@ -2,7 +2,17 @@
     ViewData["Title"] = "Управление участками";
 }
 
-
+<script>
+    window.initMap = function () {
+        setTimeout(function () {
+            var latlng = new google.maps.LatLng(39.305, -76.617);
+            window.map = new google.maps.Map(document.getElementById('map-placeholder'), {
+                center: latlng,
+                zoom: 12
+            });
+        }, 100);
+    };
+</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPao9V4NIAQgTD7O5a4Xf8n3fk7rkdf2s&callback=initMap&language=RU" async defer></script>
 <script src="https://unpkg.com/vuejs-paginate@latest"></script>
 <script src="https://unpkg.com/vuejs-paginate@0.9.0"></script>
@@ -18,10 +28,10 @@
                 <h5><i class="fas fa-list"></i> Список земель</h5>
             </div>
             <div class="col-6 text-right">
-                <span class="btn btn-primary btn-xs">
+                <a href="javascript:;" v-on:click="newLand" class="btn btn-primary btn-xs">
                     <i class="fas fa-plus-square"></i>
                     Создать
-                </span>
+                </a>
             </div>
         </div>
         <div class="table-list">
@@ -35,18 +45,17 @@
                     </select>
                 </span>
                 <nav class="table-nav" aria-label="Page navigation example">
-                    <paginate
-                        :page-count="totalPages"
-                        :click-handler="changePage"
-                        :prev-text="'След.'"
-                        :next-text="'Пред.'"
-                        :page-link-class="'page-link'"
-                        :page-class="'page-item'"
-                        :prev-link-class="'page-link'"
-                        :prev-class="'page-item'"
-                        :next-link-class="'page-link'"
-                        :next-class="'page-item'"
-                        :container-class="'pagination pagination-sm'">
+                    <paginate :page-count="totalPages"
+                              :click-handler="changePage"
+                              :prev-text="'След.'"
+                              :next-text="'Пред.'"
+                              :page-link-class="'page-link'"
+                              :page-class="'page-item'"
+                              :prev-link-class="'page-link'"
+                              :prev-class="'page-item'"
+                              :next-link-class="'page-link'"
+                              :next-class="'page-item'"
+                              :container-class="'pagination pagination-sm'">
                     </paginate>
                 </nav>
             </div>
@@ -87,13 +96,13 @@
     </div>
 </div>
 
-<div style="display: none;" class="edit-land-modal">
-    <div style="display: inline-block; background-color: rgba(0, 0, 0, 0.2);;" class="modal" tabindex="-1" role="dialog">
+<div v-show="visible" class="edit-land-modal">
+    <div style="display: inline-block; background-color: rgba(0, 0, 0, 0.2);" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Просмотр участка #245</h5>
-                    <span class="close">
+                    <span v-on:click="close()" class="close">
                         <span aria-hidden="true">&times;</span>
                     </span>
                 </div>
@@ -171,9 +180,13 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">
+                    <button v-on:click="edit()" type="button" class="btn btn-primary">
                         <i class="fas fa-edit"></i>
                         Редактировать
+                    </button>
+                    <button v-on:click="save()" type="button" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Сохрнить
                     </button>
                 </div>
             </div>

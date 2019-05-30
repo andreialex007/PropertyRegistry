@@ -2,20 +2,80 @@
     ViewData["Title"] = "Реестр земель";
 }
 
-<div class="root fill-remaining-height">
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTTN0q3ipJUDSYtzIrXREZBDuScM_dimY&callback=initMap" async defer></script>
+<script src="~/js/call-scripts/lands-page.js"></script>
+
+
+<div class="root fill-remaining-height lands-page">
     <div class="left-block">
-        <div>
-            <h5><i class="fas fa-list"></i> Список земель</h5>
+        <div class="row">
+            <div class="col-6">
+                <h5><i class="fas fa-list"></i> Список земель</h5>
+            </div>
+            <div class="col-6 text-right">
+                <span class="btn btn-primary btn-xs">
+                    <i class="fas fa-plus-square"></i>
+                    Создать
+                </span>
+            </div>
         </div>
         <div class="table-list">
+            <div class="display: flex; justify-content: space-between;">
+                <span>
+                    На странице
+                    <select class="form-control form-control-sm per-page-control">
+                        <option>20</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                </span>
+                <nav class="table-nav" aria-label="Page navigation example">
+                    <ul class="pagination pagination-sm">
+                        <li class="page-item"><a class="page-link" href="#">Предыдущая</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Следующая</a></li>
+                    </ul>
+                </nav>
+            </div>
 
+            <table class="table table-sm table-striped table-bordered lands-table-header">
+                <thead>
+                    <tr>
+                        <th class="land-number">#</th>
+                        <th>Наименование</th>
+                        <th class="land-type">Тип</th>
+                        <th class="actions"></th>
+                    </tr>
+                </thead>
+            </table>
+
+            <div class="scroll-wrapper">
+                <table class="table table-sm table-striped table-bordered lands-table-body">
+                    <tbody>
+                        @foreach (var item in Enumerable.Range(0, 40))
+                        {
+                            <tr>
+                                <td class="land-number">@item</td>
+                                <td>Мой земельный участок #@item</td>
+                                <td class="land-type">Первый</td>
+                                <td class="actions">
+                                    <span class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></span>
+                                    <span class="btn btn-xs btn-danger"><i class="fas fa-trash-alt"></i></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="right-block">
         <div>
             <h5><i class="fas fa-map-marked"></i> Карта</h5>
         </div>
-        <div class="table-list">
+        <div id="map-placeholder" class="table-list ">
 
         </div>
     </div>

@@ -84,7 +84,6 @@ body {
 .left-block {
     height: 100% !important;
     width: 700px !important;
-    border-right: 1px solid lightgray;
 }
 
 .right-block {
@@ -97,4 +96,52 @@ body {
 .table-list {
     width: 100%;
     height: calc(100% - 41px);
+}
+
+
+.btn-group-xs > .btn, .btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .5;
+    border-radius: .2rem;
+}
+
+
+.lands-table-header {
+    table-layout: fixed;
+    margin: 0px;
+}
+
+.lands-table-body {
+    table-layout: fixed;
+}
+
+.land-number {
+    width: 80px;
+}
+
+.land-type {
+    width: 100px;
+}
+
+
+.actions {
+    width: 89px;
+}
+
+.scroll-wrapper {
+    display: inline-block;
+    height: calc(100% - 81px);
+    overflow-y: overlay;
+}
+
+
+.per-page-control {
+    display: inline-block;
+    width: 68px;
+}
+
+.table-nav {
+    display: inline-block !important;
+    float: right !important;
 }

@@ -2,7 +2,12 @@
     ViewData["Title"] = "Управление участками";
 }
 
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPao9V4NIAQgTD7O5a4Xf8n3fk7rkdf2s&callback=initMap&language=RU" async defer></script>
+<script src="https://unpkg.com/vuejs-paginate@latest"></script>
+<script src="https://unpkg.com/vuejs-paginate@0.9.0"></script>
+<script>Vue.component('paginate', VuejsPaginate)</script>
+
 <script src="~/js/call-scripts/lands-page.js"></script>
 
 
@@ -23,20 +28,26 @@
             <div class="display: flex; justify-content: space-between;">
                 <span>
                     На странице
-                    <select class="form-control form-control-sm per-page-control">
+                    <select v-model="config.take" class="form-control form-control-sm per-page-control">
                         <option>20</option>
                         <option>50</option>
                         <option>100</option>
                     </select>
                 </span>
                 <nav class="table-nav" aria-label="Page navigation example">
-                    <ul class="pagination pagination-sm">
-                        <li class="page-item"><a class="page-link" href="#">Предыдущая</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Следующая</a></li>
-                    </ul>
+                    <paginate
+                        :page-count="totalPages"
+                        :click-handler="changePage"
+                        :prev-text="'След.'"
+                        :next-text="'Пред.'"
+                        :page-link-class="'page-link'"
+                        :page-class="'page-item'"
+                        :prev-link-class="'page-link'"
+                        :prev-class="'page-item'"
+                        :next-link-class="'page-link'"
+                        :next-class="'page-item'"
+                        :container-class="'pagination pagination-sm'">
+                    </paginate>
                 </nav>
             </div>
             <table class="table table-sm table-striped table-bordered lands-table-header">
@@ -53,18 +64,15 @@
             <div class="scroll-wrapper">
                 <table class="table table-sm table-striped table-bordered lands-table-body">
                     <tbody>
-                        @foreach (var item in Enumerable.Range(0, 40))
-                        {
-                            <tr>
-                                <td class="land-number">@item</td>
-                                <td>Мой земельный участок #@item</td>
-                                <td class="land-type">Первый</td>
-                                <td class="actions">
-                                    <span class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></span>
-                                    <span class="btn btn-xs btn-danger"><i class="fas fa-trash-alt"></i></span>
-                                </td>
-                            </tr>
-                        }
+                        <tr v-for="item in items">
+                            <td class="land-number">{{ item.Id }}</td>
+                            <td>{{ item.Name }}</td>
+                            <td class="land-type">{{ item.LandType.Name }}</td>
+                            <td class="actions">
+                                <span class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></span>
+                                <span class="btn btn-xs btn-danger"><i class="fas fa-trash-alt"></i></span>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

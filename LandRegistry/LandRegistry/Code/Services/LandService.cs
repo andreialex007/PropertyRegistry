@@ -61,7 +61,17 @@ namespace LandRegistry.Code.Services
                     AssetNumber = x.AssetNumber,
                     CadastralNumberOfLand = x.CadastralNumberOfLand,
                     DocumentOnLand = x.DocumentOnLand,
-                    LandTypeId = x.LandTypeId
+                    LandTypeId = x.LandTypeId,
+                    LandRightType = new LandRightTypeItem
+                    {
+                        Name = x.LandRightType.Name,
+                        Id = x.LandRightType.Id
+                    },
+                    LandType = new LandTypeItem
+                    {
+                        Name = x.LandRightType.Name,
+                        Id = x.LandRightType.Id
+                    }
                 });
 
             var total = query.Count();

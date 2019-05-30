@@ -121,7 +121,7 @@ body {
 }
 
 .land-type {
-    width: 100px;
+    width: 305px;
 }
 
 
@@ -160,3 +160,4 @@ input[type="file"] {
     padding: 6px 12px;
     cursor: pointer;
 }
+

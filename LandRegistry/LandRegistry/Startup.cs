@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using LandRegistry.Code.Data;
 using LandRegistry.Code.Data.Models;
+using LandRegistry.Code.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -70,6 +72,31 @@ namespace LandRegistry
                     db.LandType.Add(new LandType { Name = "Единое землепользование" });
                     db.LandType.Add(new LandType { Name = "Часть земельного участка" });
                     db.SaveChanges();
+                }
+
+                if (!db.Lands.Any())
+                {
+                    var random = new Random();
+                    foreach (var number in Enumerable.Range(0, 200))
+                    {
+                        var landRightTypes = db.LandRightType.ToList();
+                        var landTypes = db.LandType.ToList();
+
+                        var landRightType = landRightTypes.Random();
+                        var landType = landTypes.Random();
+
+                        var land = new Land
+                        {
+                            LandRightTypeId = landRightType.Id,
+                            LandTypeId = landType.Id,
+                            Name = "Участок #" + number,
+                            CadastralNumberOfLand = "47:14:1203001:" + random.Next(10000, 99999999),
+                            AssetNumber = "",
+                        };
+
+                        db.Lands.Add(land);
+                        db.SaveChanges();
+                    }
                 }
             }
 

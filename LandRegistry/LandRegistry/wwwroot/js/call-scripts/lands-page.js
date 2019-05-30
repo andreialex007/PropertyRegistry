@@ -4,23 +4,19 @@
         el: ".lands-page",
         data: function () {
             return {
-
                 selectedQuestionId: null
             }
         },
         methods: {
-
         },
         computed: {
-
         },
         async mounted() {
 
         }
     });
 
-
-})
+});
 
 window.initMap = function () {
     window.map = new google.maps.Map(document.getElementById('map-placeholder'), {

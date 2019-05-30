@@ -1,34 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LandRegistry.Code.Data.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using LandRegistry.Models;
 using Microsoft.AspNetCore.Hosting;
 
 namespace LandRegistry.Controllers
 {
     public class HomeController : AppControllerBase
     {
+        public HomeController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment)
+        {
+        }
+
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        public IActionResult Search([FromBody] LandSearchParameters parameters)
         {
-            return View();
+            var (items, total, filtered) = this.Service.Land.Search(parameters);
+            return Json(new
+            {
+                items,
+                total,
+                filtered
+            });
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public IActionResult LoadLand(int id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var land = this.Service.Land.Get(id);
+            return Json(land);
         }
 
-        public HomeController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment)
+        [HttpGet]
+        public IActionResult SaveLand([FromBody] LandItem item)
         {
+            this.Service.Land.Save(item);
+            return Json(item);
         }
     }
 }

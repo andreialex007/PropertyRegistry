@@ -9,7 +9,7 @@ namespace LandRegistry.Code.Data.ViewModels
         [Required(ErrorMessage = "Имя должно быть заполнено")]
         public string Name { get; set; }
 
-        public int LandTypeId { get; set; }
+        public int? LandTypeId { get; set; }
         public LandTypeItem LandType { get; set; }
 
         public string AssetNumber { get; set; }
@@ -17,7 +17,7 @@ namespace LandRegistry.Code.Data.ViewModels
         [Required(ErrorMessage = "Кадастровый номер участка должен быть заполнен")]
         public string CadastralNumberOfLand { get; set; }
 
-        public int LandRightTypeId { get; set; }
+        public int? LandRightTypeId { get; set; }
         public LandRightTypeItem LandRightType { get; set; }
 
         public byte[] DocumentOnLand { get; set; }

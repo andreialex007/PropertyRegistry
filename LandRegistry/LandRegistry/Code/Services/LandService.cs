@@ -40,7 +40,7 @@ namespace LandRegistry.Code.Services
                             Id = x.LandRightType.Id
                         }
                     })
-                    .Single();
+                    .Single(x => x.Id == id);
             }
 
             landItem.AvaliableLandRightTypeItems = this.App.LandRightType.All();

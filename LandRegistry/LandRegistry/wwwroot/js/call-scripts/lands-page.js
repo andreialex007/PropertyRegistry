@@ -20,6 +20,9 @@
             newLand() {
                 editLandModal.open(0);
             },
+            viewLand(id) {
+                editLandModal.open(id);
+            },
             changePage(pageNumber) {
                 this.config.skip = (pageNumber - 1) * this.config.take;
                 this.search();
@@ -68,8 +71,10 @@
         el: ".edit-land-modal",
         data: function () {
             return {
+                loading: false,
                 visible: false,
                 landId: 0,
+                readOnly: true,
                 entity: {
 
                 }
@@ -82,12 +87,24 @@
             async search(reset) {
 
             },
-            open(landId) {
+            async open(landId) {
 
+                this.loading = true;
+                let result = await $.ajax({
+                    method: "GET",
+                    contentType: "application/json",
+                    url: "/Home/LoadLand?id=" + landId
+                });
+                this.loading = false;
 
+                this.entity = result;
 
                 this.landId = landId;
+                this.readOnly = this.landId !== 0;
                 this.visible = true;
+            },
+            edit() {
+                this.readOnly = false;
             },
             close() {
                 this.visible = false;

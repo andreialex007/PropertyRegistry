@@ -15,7 +15,7 @@
         /// <summary>
         /// Тип земельного участка
         /// </summary>
-        public int LandTypeId { get; set; }
+        public int? LandTypeId { get; set; }
         public LandType LandType { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@
         /// <summary>
         /// Вид права Общества на земельный участок
         /// </summary>
-        public int LandRightTypeId { get; set; }
+        public int? LandRightTypeId { get; set; }
         public LandRightType LandRightType { get; set; }
 
         /// <summary>

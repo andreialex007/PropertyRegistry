@@ -161,3 +161,16 @@ input[type="file"] {
     cursor: pointer;
 }
 
+.modal-readonly .form-control {
+    pointer-events: none !important;
+    /* background-color: #f0f0f0; */
+    background: rgba(0,0,0,0) !important;
+    border: none !important;
+    padding-left: 0px !important;
+}
+
+.modal-readonly select {
+    border: none !important;
+    padding-left: 0px !important;
+    pointer-events: none !important;
+}

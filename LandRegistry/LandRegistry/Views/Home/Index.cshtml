@@ -78,7 +78,7 @@
                             <td>{{ item.Name }}</td>
                             <td class="land-type">{{ item.LandType.Name }}</td>
                             <td class="actions">
-                                <span class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></span>
+                                <span v-on:click="viewLand(item.Id)" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></span>
                                 <span class="btn btn-xs btn-danger"><i class="fas fa-trash-alt"></i></span>
                             </td>
                         </tr>
@@ -99,9 +99,10 @@
 <div v-show="visible" class="edit-land-modal">
     <div style="display: inline-block; background-color: rgba(0, 0, 0, 0.2);" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div v-bind:class="{ 'modal-readonly': readOnly }" class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Просмотр участка #245</h5>
+                    <h5 v-if="entity.Id > 0" class="modal-title">Просмотр участка #{{ entity.Id }}</h5>
+                    <h5 v-else class="modal-title">Новый земельный участок</h5>
                     <span v-on:click="close()" class="close">
                         <span aria-hidden="true">&times;</span>
                     </span>
@@ -110,8 +111,8 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Наименование земельного участка *</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите наименование">
+                                <label>Наименование земельного участка *</label>
+                                <input v-model="entity.Name" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите наименование">
                                 <small id="emailHelp" class="form-text text-muted">Поле обязательно для заполнения.</small>
                             </div>
                         </div>
@@ -119,8 +120,8 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Кадастровый номер земельного участка *</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите кадастровый номер">
+                                <label>Кадастровый номер земельного участка *</label>
+                                <input v-model="entity.CadastralNumberOfLand" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите кадастровый номер">
                                 <small id="emailHelp" class="form-text text-muted">Поле обязательно для заполнения.</small>
                             </div>
                         </div>
@@ -130,7 +131,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Инвентарный номер основного средства</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите номер основного средства">
+                                <input v-model="entity.AssetNumber" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите номер основного средства">
                             </div>
                         </div>
                     </div>
@@ -139,16 +140,18 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Тип земельного участка</label>
-                                <select class="form-control">
-                                    <option value="">Не указан</option>
+                                <select v-model="entity.LandTypeId" class="form-control">
+                                    <option value="null">Не указан</option>
+                                    <option v-bind:value="item.Id" v-for="item in entity.AvaliableLandTypeItems" value="">{{ item.Name }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Вид права Общества на земельный участок</label>
-                                <select class="form-control">
-                                    <option value="">Не указан</option>
+                                <select v-model="entity.LandRightTypeId" class="form-control">
+                                    <option value="null">Не указан</option>
+                                    <option v-bind:value="item.Id" v-for="item in entity.AvaliableLandRightTypeItems" value="">{{ item.Name }}</option>
                                 </select>
                             </div>
                         </div>

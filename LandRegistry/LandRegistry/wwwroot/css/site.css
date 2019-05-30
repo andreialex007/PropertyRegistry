@@ -145,3 +145,18 @@ body {
     display: inline-block !important;
     float: right !important;
 }
+
+.edit-land-modal .modal-dialog {
+    max-width: 1000px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}

@@ -13,7 +13,7 @@ namespace LandRegistry.Code.Services
 
         public List<LandTypeItem> All()
         {
-            var items = Db.LandRightType
+            var items = Db.LandType
                 .Select(x => new LandTypeItem
                 {
                     Id = x.Id,

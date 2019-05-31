@@ -59,6 +59,25 @@ $(function () {
             }
         };
 
+        self.getBase64 = function (file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        self.downloadURI = function (uri, name) {
+            var link = document.createElement("a");
+            link.download = name;
+            link.href = uri;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            delete link;
+        }
+
         return self;
 
 

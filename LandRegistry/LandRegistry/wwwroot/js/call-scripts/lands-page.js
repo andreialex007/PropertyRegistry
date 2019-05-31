@@ -57,8 +57,8 @@
         },
         computed: {
             totalPages() {
-                let number = this.totalRecords / this.config.take;
-                number += this.totalRecords % this.config.take == 0 ? 0 : 1;
+                let number = Math.floor(this.totalRecords / this.config.take);
+                number += this.totalRecords % this.config.take === 0 ? 0 : 1;
                 return number;
             }
         },
@@ -109,8 +109,31 @@
             close() {
                 this.visible = false;
             },
-            save() {
+            async save() {
+
+                let result = await $.ajax({
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(this.entity),
+                    url: "/Home/SaveLand"
+                });
+
+
                 this.close();
+            },
+            async fileSelected(item) {
+                let result = await utils.getBase64(item.target.files[0]);
+                this.entity.DocumentBase64 = result;
+                this.entity.DocumentOnLandFileName = item.target.files[0].name;
+            },
+            downloadFile() {
+                utils.downloadURI(this.entity.DocumentBase64, this.entity.DocumentOnLandFileName);
+            },
+            removeFile() {
+                this.entity.DocumentBase64 = null;
+                this.entity.DocumentOnLandFileName = null;
+                this.entity.DocumentOnLand = null;
+                $("input[type='file']").val("");
             }
         },
         watch: {

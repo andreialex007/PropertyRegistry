@@ -162,15 +162,29 @@ input[type="file"] {
 }
 
 .modal-readonly .form-control {
-    pointer-events: none !important;
-    /* background-color: #f0f0f0; */
     background: rgba(0,0,0,0) !important;
     border: none !important;
     padding-left: 0px !important;
+    outline: none !important;
+    outline-style:none !important;
+    box-shadow:none !important;
+    border-color:transparent !important;
 }
 
 .modal-readonly select {
     border: none !important;
     padding-left: 0px !important;
     pointer-events: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    text-indent: 1px !important;
+    text-overflow: '' !important;
+    outline: none !important;
+    outline-style:none !important;
+    box-shadow:none !important;
+    border-color:transparent !important;
+}
+
+.modal-readonly .form-text {
+    display: none;
 }

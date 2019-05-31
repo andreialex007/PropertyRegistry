@@ -1,4 +1,6 @@
-﻿using LandRegistry.Code.Data.ViewModels;
+﻿using System;
+using LandRegistry.Code.Data.ViewModels;
+using LandRegistry.Code.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
 
@@ -35,9 +37,10 @@ namespace LandRegistry.Controllers
             return Json(land);
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult SaveLand([FromBody] LandItem item)
         {
+            if (item.DocumentBase64.HasValue()) item.DocumentOnLand = Convert.FromBase64String(item.DocumentBase64Data);
             this.Service.Land.Save(item);
             return Json(item);
         }

@@ -112,8 +112,8 @@
                         <div class="col">
                             <div class="form-group">
                                 <label>Наименование земельного участка *</label>
-                                <input v-model="entity.Name" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите наименование">
-                                <small id="emailHelp" class="form-text text-muted">Поле обязательно для заполнения.</small>
+                                <input v-bind:readonly="readOnly" v-model="entity.Name" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите наименование">
+                                <small class="form-text text-muted">Поле обязательно для заполнения.</small>
                             </div>
                         </div>
                     </div>
@@ -121,8 +121,8 @@
                         <div class="col">
                             <div class="form-group">
                                 <label>Кадастровый номер земельного участка *</label>
-                                <input v-model="entity.CadastralNumberOfLand" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите кадастровый номер">
-                                <small id="emailHelp" class="form-text text-muted">Поле обязательно для заполнения.</small>
+                                <input v-bind:readonly="readOnly" v-model="entity.CadastralNumberOfLand" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите кадастровый номер">
+                                <small class="form-text text-muted">Поле обязательно для заполнения.</small>
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Инвентарный номер основного средства</label>
-                                <input v-model="entity.AssetNumber" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите номер основного средства">
+                                <input v-bind:readonly="readOnly" v-model="entity.AssetNumber" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Не указан">
                             </div>
                         </div>
                     </div>
@@ -162,17 +162,17 @@
                         <div class="col">
                             <div class="form-group">
                                 <div>
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-secondary">
+                                    <div v-if="!!entity.DocumentOnLandFileName" class="btn-group" role="group">
+                                        <button type="button" v-on:click="downloadFile" class="btn btn-secondary">
                                             <i class="fas fa-file"></i>
-                                            MyFileName.docx
+                                            {{ entity.DocumentOnLandFileName }}
                                         </button>
-                                        <button type="button" class="btn btn-dark">
+                                        <button v-if="!readOnly" type="button" v-on:click="removeFile" class="btn btn-dark">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </div>
-                                    <label class="custom-file-upload btn btn-primary mb-0">
-                                        <input type="file" />
+                                    <label v-if="!entity.DocumentOnLandFileName && !readOnly" class="custom-file-upload btn btn-primary mb-0">
+                                        <input v-on:change="fileSelected" type="file" />
                                         <i class="fas fa-upload"></i>
                                         Прикрепить файл
                                     </label>
@@ -183,11 +183,11 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button v-on:click="edit()" type="button" class="btn btn-primary">
+                    <button v-if="readOnly" v-on:click="edit()" type="button" class="btn btn-primary">
                         <i class="fas fa-edit"></i>
                         Редактировать
                     </button>
-                    <button v-on:click="save()" type="button" class="btn btn-primary">
+                    <button v-else v-on:click="save()" type="button" class="btn btn-primary">
                         <i class="fas fa-save"></i>
                         Сохрнить
                     </button>

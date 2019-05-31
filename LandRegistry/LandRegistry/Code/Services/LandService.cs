@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using LandRegistry.Code.Data;
 using LandRegistry.Code.Data.Models;
 using LandRegistry.Code.Data.ViewModels;
 using LandRegistry.Code.Extensions;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace LandRegistry.Code.Services
 {
@@ -27,6 +30,8 @@ namespace LandRegistry.Code.Services
                         AssetNumber = x.AssetNumber,
                         CadastralNumberOfLand = x.CadastralNumberOfLand,
                         DocumentOnLand = x.DocumentOnLand,
+                        Coordinates = x.Coordinates,
+                        DocumentOnLandFileName = x.DocumentOnLandFileName,
                         LandTypeId = x.LandTypeId,
                         LandRightTypeId = x.LandRightTypeId,
                         LandRightType = new LandRightTypeItem
@@ -42,6 +47,15 @@ namespace LandRegistry.Code.Services
                     })
                     .Single(x => x.Id == id);
             }
+
+            if (landItem.DocumentOnLand != null)
+            {
+                var provider = new FileExtensionContentTypeProvider();
+                var providerMappings = provider.Mappings;
+                var extension = Path.GetExtension(landItem.DocumentOnLandFileName);
+                landItem.DocumentBase64 = $"data:{providerMappings[extension]};base64,{Convert.ToBase64String(landItem.DocumentOnLand)}";
+            }
+
 
             landItem.AvaliableLandRightTypeItems = this.App.LandRightType.All();
             landItem.AvaliableLandTypeItems = this.App.LandType.All();
@@ -109,6 +123,7 @@ namespace LandRegistry.Code.Services
             dbItem.LandRightTypeId = inputItem.LandRightTypeId;
             dbItem.LandTypeId = inputItem.LandTypeId;
             dbItem.DocumentOnLand = inputItem.DocumentOnLand;
+            dbItem.DocumentOnLandFileName = inputItem.DocumentOnLandFileName;
             Db.SaveChanges();
 
             inputItem.Id = dbItem.Id;

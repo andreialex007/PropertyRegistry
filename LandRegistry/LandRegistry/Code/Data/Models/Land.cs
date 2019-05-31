@@ -38,6 +38,12 @@
         /// Правоустанавливающий документ на земельный участок
         /// </summary>
         public byte[] DocumentOnLand { get; set; }
+        public string DocumentOnLandFileName { get; set; }
+
+        /// <summary>
+        /// Координаты
+        /// </summary>
+        public string Coordinates { get; set; }
 
     }
 }

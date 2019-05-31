@@ -166,9 +166,9 @@ input[type="file"] {
     border: none !important;
     padding-left: 0px !important;
     outline: none !important;
-    outline-style:none !important;
-    box-shadow:none !important;
-    border-color:transparent !important;
+    outline-style: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
 
 .modal-readonly select {
@@ -180,11 +180,29 @@ input[type="file"] {
     text-indent: 1px !important;
     text-overflow: '' !important;
     outline: none !important;
-    outline-style:none !important;
-    box-shadow:none !important;
-    border-color:transparent !important;
+    outline-style: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
 
 .modal-readonly .form-text {
     display: none;
+}
+
+.disabled-button {
+    pointer-events: none !important;
+    opacity: 0.5 !important;
+}
+
+body.swal2-height-auto {
+    height: calc(100%) !important;
+}
+
+.table-list table tr td.actions .btn {
+    visibility: hidden;
+}
+
+
+.table-list table tr:hover td.actions .btn {
+    visibility: visible !important;
 }

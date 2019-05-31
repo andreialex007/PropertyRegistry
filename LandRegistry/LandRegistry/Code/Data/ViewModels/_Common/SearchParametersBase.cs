@@ -3,7 +3,7 @@
     public abstract class SearchParametersBase
     {
         public string OrderBy { get; set; } = "Id";
-        public bool IsAsc { get; set; } = false;
+        public bool IsAsc { get; set; } = true;
         public int? Skip { get; set; } = 0;
         public int? Take { get; set; } = 50;
     }

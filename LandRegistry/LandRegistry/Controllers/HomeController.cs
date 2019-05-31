@@ -44,5 +44,12 @@ namespace LandRegistry.Controllers
             this.Service.Land.Save(item);
             return Json(item);
         }
+
+        [HttpGet]
+        public IActionResult DeleteLand(int id)
+        {
+            this.Service.Land.Delete(id);
+            return Json(new { result = "ok" });
+        }
     }
 }

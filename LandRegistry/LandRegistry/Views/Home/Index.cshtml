@@ -2,30 +2,28 @@
     ViewData["Title"] = "Управление участками";
 }
 
-<script>
-    window.initMap = function () {
-        setTimeout(function () {
-            var latlng = new google.maps.LatLng(39.305, -76.617);
-            window.map = new google.maps.Map(document.getElementById('map-placeholder'), {
-                center: latlng,
-                zoom: 12
-            });
-        }, 100);
-    };
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPao9V4NIAQgTD7O5a4Xf8n3fk7rkdf2s&callback=initMap&language=RU" async defer></script>
+
+<script src="~/js/call-scripts/maps-editor.js" asp-append-version="true"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+<link href="~/css/sweetalert2.css" rel="stylesheet" />
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPao9V4NIAQgTD7O5a4Xf8n3fk7rkdf2s&callback=initMap&language=RU&libraries=drawing" async defer></script>
 <script src="https://unpkg.com/vuejs-paginate@latest"></script>
 <script src="https://unpkg.com/vuejs-paginate@0.9.0"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.all.min.js"></script>
 <script>Vue.component('paginate', VuejsPaginate)</script>
 
-<script src="~/js/call-scripts/lands-page.js"></script>
+
+<script src="~/js/call-scripts/lands-page.js" asp-append-version="true"></script>
+<script src="~/js/call-scripts/edit-land-modal.js" asp-append-version="true"></script>
 
 
 <div class="root fill-remaining-height lands-page">
     <div class="left-block">
         <div class="row">
             <div class="col-6">
-                <h5><i class="fas fa-list"></i> Список земель</h5>
+                <h5><i class="fas fa-list"></i> Список земель (Всего: {{ totalRecords }})</h5>
             </div>
             <div class="col-6 text-right">
                 <a href="javascript:;" v-on:click="newLand" class="btn btn-primary btn-xs">
@@ -71,7 +69,7 @@
             </table>
 
             <div class="scroll-wrapper">
-                <table class="table table-sm table-striped table-bordered lands-table-body">
+                <table class="table table-sm table-striped table-bordered table-hover lands-table-body">
                     <tbody>
                         <tr v-for="item in items">
                             <td class="land-number">{{ item.Id }}</td>
@@ -79,7 +77,7 @@
                             <td class="land-type">{{ item.LandType.Name }}</td>
                             <td class="actions">
                                 <span v-on:click="viewLand(item.Id)" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></span>
-                                <span class="btn btn-xs btn-danger"><i class="fas fa-trash-alt"></i></span>
+                                <span v-on:click="deleteLand(item.Id)" class="btn btn-xs btn-danger"><i class="fas fa-trash-alt"></i></span>
                             </td>
                         </tr>
                     </tbody>
@@ -111,18 +109,18 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label>Наименование земельного участка *</label>
-                                <input v-bind:readonly="readOnly" v-model="entity.Name" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите наименование">
-                                <small class="form-text text-muted">Поле обязательно для заполнения.</small>
+                                <label>Наименование земельного участка</label>
+                                <input v-bind:readonly="readOnly" v-model="entity.Name" type="email" class="form-control" placeholder="Введите наименование">
+                                <small v-if="!entity.Name" class="form-text text-danger">Поле обязательно для заполнения.</small>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label>Кадастровый номер земельного участка *</label>
-                                <input v-bind:readonly="readOnly" v-model="entity.CadastralNumberOfLand" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите кадастровый номер">
-                                <small class="form-text text-muted">Поле обязательно для заполнения.</small>
+                                <label>Кадастровый номер земельного участка</label>
+                                <input v-bind:readonly="readOnly" v-model="entity.CadastralNumberOfLand" type="email" class="form-control" placeholder="Введите кадастровый номер">
+                                <small v-if="!entity.CadastralNumberOfLand" class="form-text text-danger">Поле обязательно для заполнения.</small>
                             </div>
                         </div>
                     </div>
@@ -187,9 +185,9 @@
                         <i class="fas fa-edit"></i>
                         Редактировать
                     </button>
-                    <button v-else v-on:click="save()" type="button" class="btn btn-primary">
+                    <button v-bind:class="{ 'disabled-button': (!entity.CadastralNumberOfLand || !entity.Name) }" v-else v-on:click="save()" type="button" class="btn btn-primary">
                         <i class="fas fa-save"></i>
-                        Сохрнить
+                        Сохранить
                     </button>
                 </div>
             </div>

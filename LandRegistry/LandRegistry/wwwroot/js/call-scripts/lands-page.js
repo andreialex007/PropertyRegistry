@@ -13,7 +13,6 @@
                     skip: 0,
                     take: 50
                 }
-
             }
         },
         methods: {
@@ -22,6 +21,26 @@
             },
             viewLand(id) {
                 editLandModal.open(id);
+            },
+            async deleteLand(id) {
+                let result = await Swal.fire({
+                    type: 'question',
+                    title: 'Действительно хотите удалить участок?',
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Да, удалить!',
+                    cancelButtonText: 'Нет!'
+                });
+
+                if (result.value === true) {
+                    await $.ajax({
+                        method: "GET",
+                        contentType: "application/json",
+                        url: "/Home/DeleteLand?id=" + id
+                    });
+
+                    this.search();
+                }
             },
             changePage(pageNumber) {
                 this.config.skip = (pageNumber - 1) * this.config.take;
@@ -67,85 +86,4 @@
         }
     });
 
-    window.editLandModal = new Vue({
-        el: ".edit-land-modal",
-        data: function () {
-            return {
-                loading: false,
-                visible: false,
-                landId: 0,
-                readOnly: true,
-                entity: {
-
-                }
-            }
-        },
-        methods: {
-            changePage(pageNumber) {
-
-            },
-            async search(reset) {
-
-            },
-            async open(landId) {
-
-                this.loading = true;
-                let result = await $.ajax({
-                    method: "GET",
-                    contentType: "application/json",
-                    url: "/Home/LoadLand?id=" + landId
-                });
-                this.loading = false;
-
-                this.entity = result;
-
-                this.landId = landId;
-                this.readOnly = this.landId !== 0;
-                this.visible = true;
-            },
-            edit() {
-                this.readOnly = false;
-            },
-            close() {
-                this.visible = false;
-            },
-            async save() {
-
-                let result = await $.ajax({
-                    method: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify(this.entity),
-                    url: "/Home/SaveLand"
-                });
-
-
-                this.close();
-            },
-            async fileSelected(item) {
-                let result = await utils.getBase64(item.target.files[0]);
-                this.entity.DocumentBase64 = result;
-                this.entity.DocumentOnLandFileName = item.target.files[0].name;
-            },
-            downloadFile() {
-                utils.downloadURI(this.entity.DocumentBase64, this.entity.DocumentOnLandFileName);
-            },
-            removeFile() {
-                this.entity.DocumentBase64 = null;
-                this.entity.DocumentOnLandFileName = null;
-                this.entity.DocumentOnLand = null;
-                $("input[type='file']").val("");
-            }
-        },
-        watch: {
-
-        },
-        computed: {
-
-        },
-        async mounted() {
-
-        }
-    });
-
 });
-

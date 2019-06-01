@@ -120,7 +120,7 @@ namespace LandRegistry
                 if (!db.Lands.Any())
                 {
 
-                    var readAllText = File.ReadAllText(@"C:\mo.geojson");
+                    var readAllText = System.Text.Encoding.UTF8.GetString(Resource.mo);
                     var deserializeObject = JsonConvert.DeserializeObject<RootObject>(readAllText);
                     var geometryPoints = deserializeObject.features
                         .Select(x => new { x.properties.NAME, x.properties.TYPE_MO, x.geometry.Points })

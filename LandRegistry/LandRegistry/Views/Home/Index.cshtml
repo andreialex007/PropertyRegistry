@@ -81,7 +81,8 @@
                                 <span v-else><em>не указано</em></span>
                             </td>
                             <td class="actions">
-                                <span v-on:click="viewLand(item.Id)" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></span>
+                                <span v-on:click="viewLand(item.Id)" class="btn btn-xs btn-warning"><i class="fas fa-eye"></i></span>
+                                <span v-on:click="editLand(item.Id)" class="btn btn-xs btn-primary"><i class="fas fa-edit"></i></span>
                                 <span v-on:click="deleteLand(item.Id)" class="btn btn-xs btn-danger"><i class="fas fa-trash-alt"></i></span>
                             </td>
                         </tr>

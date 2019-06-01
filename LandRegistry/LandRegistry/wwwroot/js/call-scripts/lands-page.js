@@ -22,6 +22,9 @@
             },
             viewLand(id) {
                 this.centeringShape(id);
+            },
+            editLand(id) {
+                this.centeringShape(id);
                 editLandModal.open(id);
             },
             async deleteLand(id) {

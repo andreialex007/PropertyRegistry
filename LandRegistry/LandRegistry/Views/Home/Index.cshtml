@@ -20,7 +20,7 @@
 
 
 <div class="root fill-remaining-height lands-page">
-    <div class="left-block">
+    <div v-bind:class="{ 'drawing-mode': isDrawingEnabled }" class="left-block">
         <div class="row">
             <div class="col-6">
                 <h5><i class="fas fa-list"></i> Список участков (Всего: {{ totalRecords }})</h5>
@@ -93,18 +93,20 @@
                 </h5>
             </div>
             <div class="col-6 text-right">
-                <span v-on:click="startDrawingFromCoordinates" class="btn btn-xs btn-success d-inline">
-                    <i class="fas fa-file"></i>
-                    Загрузить фигуру
-                </span>
-                <span v-on:click="" class="btn btn-xs btn-success d-inline ml-2">
-                    <i class="fas fa-check"></i>
-                    Применить
-                </span>
-                <span v-on:click="clearMap" class="btn btn-xs btn-danger ml-2 d-inline">
-                    <i class="fas fa-times"></i>
-                    Очистить
-                </span>
+                <div v-if="isDrawingEnabled" >
+                    <span v-on:click="applyShape" class="btn btn-xs btn-success d-inline ml-2">
+                        <i class="fas fa-check"></i>
+                        Применить
+                    </span>
+                    <span v-on:click="clearMap" class="btn btn-xs btn-warning ml-2 d-inline">
+                        <i class="fas fa-eraser"></i>
+                        Очистить
+                    </span>
+                    <span v-on:click="disableDrawing" class="btn btn-xs btn-danger ml-2 d-inline">
+                        <i class="fas fa-undo"></i>
+                        Отмена
+                    </span>
+                </div>
             </div>
         </div>
         <div id="map-placeholder" class="table-list ">

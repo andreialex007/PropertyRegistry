@@ -10,6 +10,11 @@ window.mapManagerMixIn = {
     created: function () {
 
     },
+    data: function () {
+        return {
+            isDrawingEnabled: false
+        }
+    },
     methods: {
         disableDrawing: function () {
             window.drawingManager.setMap(null);
@@ -17,13 +22,19 @@ window.mapManagerMixIn = {
                 window.currentShape.setMap(null);
                 window.currentShape = null;
             }
+            this.isDrawingEnabled = false;
         },
         startDrawing: function () {
+            this.isDrawingEnabled = true;
             window.drawingManager.setMap(window.map);
             drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
         },
         getShapeCoordinates: function () {
             return window.currentShape.getPath().getArray().map(x => ({ lat: x.lat(), lng: x.lng() }));
+        },
+        applyShape() {
+            //todo
+            this.disableDrawing();
         },
         clearMap: function () {
             this.disableDrawing();

@@ -18,7 +18,8 @@
         },
         methods: {
             newLand() {
-                editLandModal.open(0);
+                this.startDrawing();
+                // editLandModal.open(0);
             },
             viewLand(id) {
                 editLandModal.open(id);

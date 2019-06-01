@@ -206,3 +206,8 @@ body.swal2-height-auto {
 .table-list table tr:hover td.actions .btn {
     visibility: visible !important;
 }
+
+.left-block.drawing-mode {
+    pointer-events: none;
+    opacity: 0.5;
+}

@@ -4,7 +4,11 @@
         <div class="modal-dialog" role="document">
             <div v-bind:class="{ 'modal-readonly': readOnly }" class="modal-content">
                 <div class="modal-header">
-                    <h5 v-if="entity.Id > 0" class="modal-title">Просмотр участка #{{ entity.Id }}</h5>
+                    <h5 v-if="entity.Id > 0" class="modal-title">
+                        <span v-if="readOnly">Просмотр</span>
+                        <span v-if="!readOnly">Редактирование</span>
+                        участка #{{ entity.Id }}
+                    </h5>
                     <h5 v-else class="modal-title">Новый земельный участок</h5>
                     <span v-on:click="close()" class="close">
                         <span aria-hidden="true">&times;</span>

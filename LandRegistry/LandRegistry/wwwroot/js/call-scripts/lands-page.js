@@ -19,9 +19,9 @@
         methods: {
             newLand() {
                 this.startDrawing();
-                // editLandModal.open(0);
             },
             viewLand(id) {
+                this.centeringShape(id);
                 editLandModal.open(id);
             },
             async deleteLand(id) {
@@ -69,6 +69,10 @@
                 this.items = result.items;
                 this.totalRecords = result.total;
                 this.filteredRecords = result.filtered;
+
+                await utils.wait(200);
+
+                this.addAllLandShapes();
             }
         },
         watch: {

@@ -13,6 +13,10 @@
             }
         },
         methods: {
+            async create(coordinates) {
+                await this.open(0);
+                this.entity.Coordinates = coordinates;
+            },
             async open(landId) {
 
                 this.loading = true;

@@ -1,10 +1,25 @@
-﻿window.initMap = function () {
+﻿
+window.initMap = function () {
     setTimeout(function () {
         landsPage.initGoogleMap();
+
+        google.maps.Polygon.prototype.getBounds = function () {
+            var bounds = new google.maps.LatLngBounds();
+            var paths = this.getPaths();
+            var path;
+            for (var i = 0; i < paths.getLength(); i++) {
+                path = paths.getAt(i);
+                for (var ii = 0; ii < path.getLength(); ii++) {
+                    bounds.extend(path.getAt(ii));
+                }
+            }
+            return bounds;
+        }
     },
         200);
 };
 
+window.landShapes = [];
 
 window.mapManagerMixIn = {
     created: function () {
@@ -29,38 +44,72 @@ window.mapManagerMixIn = {
             window.drawingManager.setMap(window.map);
             drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
         },
+        hideLandShapes() {
+            for (let shape of window.landShapes) {
+                shape.setVisible(false);
+            }
+        },
+        addAllLandShapes() {
+            for (let shape of window.landShapes) {
+                shape.setMap(null);
+            }
+            window.landShapes = [];
+
+            for (let item of this.items) {
+                let coordinates = item.Coordinates;
+                let object = JSON.parse(coordinates);
+                if (object === null)
+                    continue;
+                let shape = this.setShapeFromCoordinates(item.Id, object, false);
+                window.landShapes.push(shape);
+            }
+        },
         getShapeCoordinates: function () {
             return window.currentShape.getPath().getArray().map(x => ({ lat: x.lat(), lng: x.lng() }));
         },
         applyShape() {
-            //todo
+            let coordinates = JSON.stringify(this.getShapeCoordinates());
             this.disableDrawing();
+            editLandModal.create(coordinates);
         },
         clearMap: function () {
             this.disableDrawing();
             this.startDrawing();
         },
-        startDrawingFromCoordinates: function () {
-            this.setShapeFromCoordinates([
-                { "lat": 39.371075961814434, "lng": -76.63874717010572 },
-                { "lat": 39.30469269255688, "lng": -76.69402213348462 },
-                { "lat": 39.28450517580149, "lng": -76.6184159361967 },
-                { "lat": 39.29460789548524, "lng": -76.54486967543221 },
-                { "lat": 39.34294263864609, "lng": -76.56159602042521 }
-            ]);
+        centeringShape(id) {
+            let foundShape = window.landShapes.filter(x => x.content === id)[0];
+            if (!foundShape) {
+                return;
+            }
+            window.map.fitBounds(foundShape.getBounds());
         },
-        setShapeFromCoordinates: function (triangleCoords) {
-
-            window.currentShape = new google.maps.Polygon({
+        setShapeFromCoordinates: function (name, triangleCoords, editable) {
+            if (editable === undefined) {
+                editable = true;
+            }
+            let shape = new google.maps.Polygon({
                 paths: triangleCoords,
                 strokeColor: '#FF0000',
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
                 fillColor: '#FF0000',
                 fillOpacity: 0.10,
-                editable: true,
+                editable: editable,
+                content: name
             });
-            window.currentShape.setMap(window.map);
+            google.maps.event.addListener(shape, 'click', function (event) {
+                window.editLandModal.open(this.content);
+            });
+            google.maps.event.addListener(shape, "mouseover", function () {
+                this.setOptions({ fillColor: "#00FF00" });
+            });
+            google.maps.event.addListener(shape, "mouseout", function () {
+                this.setOptions({ fillColor: "#FF0000" });
+            });
+
+
+            shape.setMap(window.map);
+            return shape;
         },
         initGoogleMap: function () {
 

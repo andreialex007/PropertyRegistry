@@ -34,16 +34,16 @@ namespace LandRegistry.Code.Services
                         DocumentOnLandFileName = x.DocumentOnLandFileName,
                         LandTypeId = x.LandTypeId,
                         LandRightTypeId = x.LandRightTypeId,
-                        LandRightType = new LandRightTypeItem
+                        LandRightType = x.LandRightTypeId.HasValue ? new LandRightTypeItem
                         {
                             Name = x.LandRightType.Name,
                             Id = x.LandRightType.Id
-                        },
-                        LandType = new LandTypeItem
+                        } : new LandRightTypeItem(),
+                        LandType = x.LandTypeId.HasValue ? new LandTypeItem
                         {
-                            Name = x.LandRightType.Name,
-                            Id = x.LandRightType.Id
-                        }
+                            Name = x.LandType.Name,
+                            Id = x.LandType.Id
+                        } : new LandTypeItem()
                     })
                     .Single(x => x.Id == id);
             }
@@ -76,16 +76,17 @@ namespace LandRegistry.Code.Services
                     CadastralNumberOfLand = x.CadastralNumberOfLand,
                     DocumentOnLand = x.DocumentOnLand,
                     LandTypeId = x.LandTypeId,
-                    LandRightType = new LandRightTypeItem
+                    Coordinates = x.Coordinates,
+                    LandRightType = x.LandRightTypeId != null ? new LandRightTypeItem
                     {
                         Name = x.LandRightType.Name,
                         Id = x.LandRightType.Id
-                    },
-                    LandType = new LandTypeItem
+                    } : new LandRightTypeItem(),
+                    LandType = x.LandTypeId != null ? new LandTypeItem
                     {
-                        Name = x.LandRightType.Name,
-                        Id = x.LandRightType.Id
-                    }
+                        Name = x.LandType.Name,
+                        Id = x.LandType.Id
+                    } : new LandTypeItem()
                 });
 
             var total = query.Count();
@@ -120,6 +121,7 @@ namespace LandRegistry.Code.Services
             dbItem.CadastralNumberOfLand = inputItem.CadastralNumberOfLand;
             dbItem.Name = inputItem.Name;
 
+            dbItem.Coordinates = inputItem.Coordinates;
             dbItem.LandRightTypeId = inputItem.LandRightTypeId;
             dbItem.LandTypeId = inputItem.LandTypeId;
             dbItem.DocumentOnLand = inputItem.DocumentOnLand;

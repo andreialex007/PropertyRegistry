@@ -77,7 +77,7 @@ namespace LandRegistry
                 if (!db.Lands.Any())
                 {
                     var random = new Random();
-                    foreach (var number in Enumerable.Range(0, 200))
+                    foreach (var number in Enumerable.Range(0, 70))
                     {
                         var landRightTypes = db.LandRightType.ToList();
                         var landTypes = db.LandType.ToList();

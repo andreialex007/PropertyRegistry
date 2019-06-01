@@ -15,6 +15,8 @@ window.initMap = function () {
             }
             return bounds;
         }
+
+        initMapLabel();
     },
         200);
 };
@@ -23,13 +25,17 @@ window.landShapes = [];
 
 
 function attachPolygonInfoWindow(polygon) {
-    var infoWindow = new google.maps.InfoWindow();
-    google.maps.event.addListener(polygon, 'mouseover', function (e) {
-        infoWindow.setContent("Polygon Name");
-        var latLng = e.latLng;
-        infoWindow.setPosition(latLng);
-        infoWindow.open(map);
+    let center = polygon.getBounds().getCenter();
+
+    var mapLabel2 = new MapLabel({
+        text: "#" + polygon.content,
+        position: center,
+        map: window.map,
+        fontSize: 15,
+        align: 'right'
     });
+    mapLabel2.set('position', center);
+    polygon.label = mapLabel2;
 }
 
 window.mapManagerMixIn = {
@@ -74,6 +80,7 @@ window.mapManagerMixIn = {
         addAllLandShapes() {
             for (let shape of window.landShapes) {
                 shape.setMap(null);
+                shape.label.setMap(null);
             }
             window.landShapes = [];
 

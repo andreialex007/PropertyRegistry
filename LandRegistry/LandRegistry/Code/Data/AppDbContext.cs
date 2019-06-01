@@ -9,7 +9,7 @@ namespace LandRegistry.Code.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured) optionsBuilder.UseSqlServer(ConnectionString);
+            if (!optionsBuilder.IsConfigured) optionsBuilder.UseSqlServer("Data Source=31.31.196.234;Initial Catalog=u0733543_root;User Id=u0733543_root;Password=$tr0#1Sng;");
         }
 
         public AppDbContext()

@@ -31,13 +31,13 @@ namespace LandRegistry
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
-                options.Cookie.IsEssential = true;
+                // options.Cookie.IsEssential = true;
             });
 
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                // options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
@@ -51,11 +51,12 @@ namespace LandRegistry
                     };
                     options.SerializerSettings.Converters.Add(dateConverter);
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+               ;
 
 
             AppDbContext.ConnectionString = Configuration["AppSettings:MainConnnectionString"];
 
+            /*
             using (var db = new AppDbContext())
             {
                 db.Database.Migrate();
@@ -81,6 +82,7 @@ namespace LandRegistry
             }
 
             ImportMoscowGeoData();
+            */
 
             services.Configure<RequestLocalizationOptions>(options =>
             {

@@ -38,6 +38,7 @@
             },
             close() {
                 this.visible = false;
+                landsPage.disableDrawing();
             },
             async save() {
 
@@ -50,6 +51,7 @@
                 toastr.success("Участок успешно сохранен.");
                 window.landsPage.search();
                 this.close();
+                landsPage.disableDrawing();
             },
             async fileSelected(item) {
                 let result = await utils.getBase64(item.target.files[0]);

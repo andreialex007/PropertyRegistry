@@ -97,11 +97,11 @@
             </div>
             <div class="col-6 text-right">
                 <div v-if="isDrawingEnabled">
-                    <span v-on:click="applyShape" class="btn btn-xs btn-success d-inline ml-2">
+                    <span v-on:click="applyShape" v-if="shapeDrawn" class="btn btn-xs btn-success d-inline ml-2">
                         <i class="fas fa-check"></i>
-                        Применить
+                        Заполнить карточку
                     </span>
-                    <span v-on:click="clearMap" class="btn btn-xs btn-warning ml-2 d-inline">
+                    <span v-on:click="clearMap" v-if="shapeDrawn" class="btn btn-xs btn-warning ml-2 d-inline">
                         <i class="fas fa-eraser"></i>
                         Очистить
                     </span>

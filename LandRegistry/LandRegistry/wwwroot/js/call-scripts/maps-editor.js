@@ -21,28 +21,50 @@ window.initMap = function () {
 
 window.landShapes = [];
 
+
+function attachPolygonInfoWindow(polygon) {
+    var infoWindow = new google.maps.InfoWindow();
+    google.maps.event.addListener(polygon, 'mouseover', function (e) {
+        infoWindow.setContent("Polygon Name");
+        var latLng = e.latLng;
+        infoWindow.setPosition(latLng);
+        infoWindow.open(map);
+    });
+}
+
 window.mapManagerMixIn = {
     created: function () {
 
     },
     data: function () {
         return {
-            isDrawingEnabled: false
+            isDrawingEnabled: false,
+            shapeDrawn: false
         }
     },
     methods: {
-        disableDrawing: function () {
+        disableDrawing: async function () {
+            this.isDrawingEnabled = false;
+            this.shapeDrawn = false;
             window.drawingManager.setMap(null);
+            this.deleteDrawShape();
+        },
+        deleteDrawShape() {
             if (!!window.currentShape) {
                 window.currentShape.setMap(null);
                 window.currentShape = null;
             }
-            this.isDrawingEnabled = false;
         },
-        startDrawing: function () {
-            this.isDrawingEnabled = true;
+        startDrawing: async function () {
             window.drawingManager.setMap(window.map);
             drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+            this.deleteDrawShape();
+            drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+            this.isDrawingEnabled = true;
+            this.shapeDrawn = false;
+
+            await utils.wait(10);
+            $("[title='Выйти из режима рисования']").hide();
         },
         hideLandShapes() {
             for (let shape of window.landShapes) {
@@ -61,6 +83,7 @@ window.mapManagerMixIn = {
                 if (object === null)
                     continue;
                 let shape = this.setShapeFromCoordinates(item.Id, object, false);
+                attachPolygonInfoWindow(shape);
                 window.landShapes.push(shape);
             }
         },
@@ -69,7 +92,6 @@ window.mapManagerMixIn = {
         },
         applyShape() {
             let coordinates = JSON.stringify(this.getShapeCoordinates());
-            this.disableDrawing();
             editLandModal.create(coordinates);
         },
         clearMap: function () {
@@ -106,7 +128,6 @@ window.mapManagerMixIn = {
             google.maps.event.addListener(shape, "mouseout", function () {
                 this.setOptions({ fillColor: "#FF0000" });
             });
-
 
             shape.setMap(window.map);
             return shape;
@@ -149,9 +170,17 @@ window.mapManagerMixIn = {
 
             this.disableDrawing();
 
+            let vm = this;
+
             google.maps.event.addListener(drawingManager, 'overlaycomplete', function (e) {
+
+                console.log("overlay complete");
+
+                vm.shapeDrawn = true;
+
                 window.currentShape = e.overlay;
                 window.currentShape.type = e.type;
+
                 if (e.type !== google.maps.drawing.OverlayType.MARKER) {
                     window.drawingManager.setDrawingMode(null);
                 }

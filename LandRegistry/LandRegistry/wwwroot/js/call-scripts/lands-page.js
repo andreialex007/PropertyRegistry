@@ -73,7 +73,7 @@
                 let item = this.items.filter(x => x.Id === id)[0];
                 let line = this.items.indexOf(item);
                 rows[line].scrollIntoView({
-                    behavior: 'smooth',
+                    behavior: 'auto',
                     block: 'center'
                 });
             },

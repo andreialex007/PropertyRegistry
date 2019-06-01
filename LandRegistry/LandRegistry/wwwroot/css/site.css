@@ -116,12 +116,19 @@ body {
     table-layout: fixed;
 }
 
+.land-name {
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+
 .land-number {
-    width: 80px;
+    width: 50px;
 }
 
 .land-type {
-    width: 305px;
+    width: 229px;
+    white-space: nowrap;
+    overflow-x: hidden;
 }
 
 

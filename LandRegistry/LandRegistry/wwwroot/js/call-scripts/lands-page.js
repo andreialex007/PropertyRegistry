@@ -12,7 +12,7 @@
                 filteredRecords: 0,
                 config: hasStoredConfig ? JSON.parse(localStorage.landsListColumnsConfig) : {
                     skip: 0,
-                    take: 50
+                    take: 200
                 }
             }
         },

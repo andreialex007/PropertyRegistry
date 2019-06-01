@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using LandRegistry.Code.Data;
 using LandRegistry.Code.Data.Models;
 using LandRegistry.Code.Extensions;
+using LandRegistry.Code.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace LandRegistry
@@ -74,31 +77,10 @@ namespace LandRegistry
                     db.SaveChanges();
                 }
 
-                if (!db.Lands.Any())
-                {
-                    var random = new Random();
-                    foreach (var number in Enumerable.Range(0, 70))
-                    {
-                        var landRightTypes = db.LandRightType.ToList();
-                        var landTypes = db.LandType.ToList();
 
-                        var landRightType = landRightTypes.Random();
-                        var landType = landTypes.Random();
-
-                        var land = new Land
-                        {
-                            LandRightTypeId = landRightType.Id,
-                            LandTypeId = landType.Id,
-                            Name = "Участок #" + number,
-                            CadastralNumberOfLand = "47:14:1203001:" + random.Next(10000, 99999999),
-                            AssetNumber = "",
-                        };
-
-                        db.Lands.Add(land);
-                        db.SaveChanges();
-                    }
-                }
             }
+
+            ImportMoscowGeoData();
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
@@ -128,6 +110,52 @@ namespace LandRegistry
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        public void ImportMoscowGeoData()
+        {
+
+            using (var db = new AppDbContext())
+            {
+                if (!db.Lands.Any())
+                {
+
+                    var readAllText = File.ReadAllText(@"C:\mo.geojson");
+                    var deserializeObject = JsonConvert.DeserializeObject<RootObject>(readAllText);
+                    var geometryPoints = deserializeObject.features
+                        .Select(x => new { x.properties.NAME, x.properties.TYPE_MO, x.geometry.Points })
+                        .Where(x => x.Points.Any())
+                        .ToList();
+
+                    var random = new Random();
+                    foreach (var geometryPoint in geometryPoints)
+                    {
+                        var landRightTypes = db.LandRightType.ToList();
+                        var landTypes = db.LandType.ToList();
+
+                        var landRightType = landRightTypes.Random();
+                        var landType = landTypes.Random();
+
+                        var serializeObject = JsonConvert.SerializeObject(geometryPoint.Points.Select(x => new { lat = x.Y, lng = x.X }).ToList());
+
+                        var land = new Land
+                        {
+                            LandRightTypeId = landRightType.Id,
+                            LandTypeId = landType.Id,
+                            Name = geometryPoint.NAME + " - " + geometryPoint.TYPE_MO,
+                            CadastralNumberOfLand = "47:14:1203001:" + random.Next(10000, 99999999),
+                            AssetNumber = "",
+                            Coordinates = serializeObject
+                        };
+
+                        db.Lands.Add(land);
+                        db.SaveChanges();
+                    }
+                }
+
+            }
+
+
         }
     }
 }

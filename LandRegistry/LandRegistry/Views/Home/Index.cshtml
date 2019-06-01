@@ -41,6 +41,7 @@
                         <option>20</option>
                         <option>50</option>
                         <option>100</option>
+                        <option>200</option>
                     </select>
                 </span>
                 <nav class="table-nav" aria-label="Page navigation example">
@@ -62,7 +63,7 @@
                 <thead>
                     <tr>
                         <th class="land-number">#</th>
-                        <th>Наименование</th>
+                        <th class="land-name">Наименование</th>
                         <th class="land-type">Тип</th>
                         <th class="actions"></th>
                     </tr>
@@ -74,7 +75,7 @@
                     <tbody>
                         <tr v-for="item in items">
                             <td class="land-number">{{ item.Id }}</td>
-                            <td>{{ item.Name }}</td>
+                            <td class="land-name">{{ item.Name }}</td>
                             <td class="land-type">
                                 <span v-if="!!item.LandTypeId"> {{ item.LandType.Name }}</span>
                                 <span v-else><em>не указано</em></span>

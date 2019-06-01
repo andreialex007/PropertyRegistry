@@ -3,6 +3,7 @@
     let hasStoredConfig = !!localStorage.landsListColumnsConfig;
 
     window.landsPage = new Vue({
+        mixins: [window.mapManagerMixIn],
         el: ".lands-page",
         data: function () {
             return {

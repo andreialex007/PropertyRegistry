@@ -1,38 +1,46 @@
 ﻿window.initMap = function () {
+    setTimeout(function () {
+        landsPage.initGoogleMap();
+    },
+        200);
+};
 
-    window.mapApi = function () {
-        let self = {};
 
-        self.currentShape = null;
+window.mapManagerMixIn = {
+    created: function () {
 
-        self.disableDrawing = function () {
+    },
+    methods: {
+        disableDrawing: function () {
             window.drawingManager.setMap(null);
-            if (!!self.currentShape) {
-                self.currentShape.setMap(null);
-                self.currentShape = null;
+            if (!!window.currentShape) {
+                window.currentShape.setMap(null);
+                window.currentShape = null;
             }
-        }
-
-        self.startDrawing = function () {
+        },
+        startDrawing: function () {
             window.drawingManager.setMap(window.map);
             drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
-        }
-
-        self.startDrawingFromCoordinates = function () {
-            self.setShapeFromCoordinates([
-                { lat: 25.774, lng: -80.190 },
-                { lat: 18.466, lng: -66.118 },
-                { lat: 32.321, lng: -64.757 }
+        },
+        getShapeCoordinates: function () {
+            return window.currentShape.getPath().getArray().map(x => ({ lat: x.lat(), lng: x.lng() }));
+        },
+        clearMap: function () {
+            this.disableDrawing();
+            this.startDrawing();
+        },
+        startDrawingFromCoordinates: function () {
+            this.setShapeFromCoordinates([
+                { "lat": 39.371075961814434, "lng": -76.63874717010572 },
+                { "lat": 39.30469269255688, "lng": -76.69402213348462 },
+                { "lat": 39.28450517580149, "lng": -76.6184159361967 },
+                { "lat": 39.29460789548524, "lng": -76.54486967543221 },
+                { "lat": 39.34294263864609, "lng": -76.56159602042521 }
             ]);
-        }
+        },
+        setShapeFromCoordinates: function (triangleCoords) {
 
-        self.getShapeCoordinates = function () {
-            return mapApi.currentShape.getPath().getArray().map(x => ({ lat: x.lat(), lng: x.lng() }));
-        }
-
-        self.setShapeFromCoordinates = function (triangleCoords) {
-            
-            self.currentShape = new google.maps.Polygon({
+            window.currentShape = new google.maps.Polygon({
                 paths: triangleCoords,
                 strokeColor: '#FF0000',
                 strokeOpacity: 0.8,
@@ -41,65 +49,53 @@
                 fillOpacity: 0.10,
                 editable: true,
             });
-            self.currentShape.setMap(window.map);
+            window.currentShape.setMap(window.map);
+        },
+        initGoogleMap: function () {
 
-        }
+            var latlng = new google.maps.LatLng(39.305, -76.617);
+            window.map = new google.maps.Map(document.getElementById('map-placeholder'), {
+                center: latlng,
+                zoom: 12
+            });
 
-        self.init = async function () {
-            setTimeout(function () {
-                var latlng = new google.maps.LatLng(39.305, -76.617);
-                window.map = new google.maps.Map(document.getElementById('map-placeholder'), {
-                    center: latlng,
-                    zoom: 12
-                });
+            var polyOptions = {
+                strokeWeight: 0,
+                fillOpacity: 0.45,
+                editable: true,
+                draggable: true
+            };
 
-                var polyOptions = {
-                    strokeWeight: 0,
-                    fillOpacity: 0.45,
+
+            window.drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: google.maps.drawing.OverlayType.POLYGON,
+                markerOptions: {
+                    draggable: true
+                },
+                polylineOptions: {
                     editable: true,
                     draggable: true
-                };
+                },
+                rectangleOptions: polyOptions,
+                circleOptions: polyOptions,
+                polygonOptions: polyOptions,
+                map: window.map,
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_CENTER,
+                    drawingModes: []
+                }
 
+            });
 
-                window.drawingManager = new google.maps.drawing.DrawingManager({
-                    drawingMode: google.maps.drawing.OverlayType.POLYGON,
-                    markerOptions: {
-                        draggable: true
-                    },
-                    polylineOptions: {
-                        editable: true,
-                        draggable: true
-                    },
-                    rectangleOptions: polyOptions,
-                    circleOptions: polyOptions,
-                    polygonOptions: polyOptions,
-                    map: window.map,
-                    drawingControlOptions: {
-                        position: google.maps.ControlPosition.TOP_CENTER,
-                        drawingModes: []
-                    }
+            this.disableDrawing();
 
-                });
-
-                self.disableDrawing();
-
-
-
-                google.maps.event.addListener(drawingManager, 'overlaycomplete', function (e) {
-                    self.currentShape = e.overlay;
-                    self.currentShape.type = e.type;
-                    if (e.type !== google.maps.drawing.OverlayType.MARKER) {
-                        drawingManager.setDrawingMode(null);
-                    }
-                });
-            },
-                200);
+            google.maps.event.addListener(drawingManager, 'overlaycomplete', function (e) {
+                window.currentShape = e.overlay;
+                window.currentShape.type = e.type;
+                if (e.type !== google.maps.drawing.OverlayType.MARKER) {
+                    window.drawingManager.setDrawingMode(null);
+                }
+            });
         }
-
-        self.init();
-
-        return self;
-    }();
-
-
-};
+    }
+}

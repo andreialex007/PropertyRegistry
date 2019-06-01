@@ -1,0 +1,103 @@
+﻿
+<div v-show="visible" class="edit-land-modal">
+    <div style="display: inline-block; background-color: rgba(0, 0, 0, 0.2);" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div v-bind:class="{ 'modal-readonly': readOnly }" class="modal-content">
+                <div class="modal-header">
+                    <h5 v-if="entity.Id > 0" class="modal-title">Просмотр участка #{{ entity.Id }}</h5>
+                    <h5 v-else class="modal-title">Новый земельный участок</h5>
+                    <span v-on:click="close()" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </span>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Наименование земельного участка</label>
+                                <input v-bind:readonly="readOnly" v-model="entity.Name" type="email" class="form-control" placeholder="Введите наименование">
+                                <small v-if="!entity.Name" class="form-text text-danger">Поле обязательно для заполнения.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Кадастровый номер земельного участка</label>
+                                <input v-bind:readonly="readOnly" v-model="entity.CadastralNumberOfLand" type="email" class="form-control" placeholder="Введите кадастровый номер">
+                                <small v-if="!entity.CadastralNumberOfLand" class="form-text text-danger">Поле обязательно для заполнения.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Инвентарный номер основного средства</label>
+                                <input v-bind:readonly="readOnly" v-model="entity.AssetNumber" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Не указан">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Тип земельного участка</label>
+                                <select v-model="entity.LandTypeId" class="form-control">
+                                    <option value="null">Не указан</option>
+                                    <option v-bind:value="item.Id" v-for="item in entity.AvaliableLandTypeItems" value="">{{ item.Name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Вид права Общества на земельный участок</label>
+                                <select v-model="entity.LandRightTypeId" class="form-control">
+                                    <option value="null">Не указан</option>
+                                    <option v-bind:value="item.Id" v-for="item in entity.AvaliableLandRightTypeItems" value="">{{ item.Name }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <div>
+                                    <div v-if="!!entity.DocumentOnLandFileName" class="btn-group" role="group">
+                                        <button type="button" v-on:click="downloadFile" class="btn btn-secondary">
+                                            <i class="fas fa-file"></i>
+                                            {{ entity.DocumentOnLandFileName }}
+                                        </button>
+                                        <button v-if="!readOnly" type="button" v-on:click="removeFile" class="btn btn-dark">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                    <label v-if="!entity.DocumentOnLandFileName && !readOnly" class="custom-file-upload btn btn-primary mb-0">
+                                        <input v-on:change="fileSelected" type="file" />
+                                        <i class="fas fa-upload"></i>
+                                        Прикрепить файл
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button v-if="readOnly" v-on:click="edit()" type="button" class="btn btn-primary">
+                        <i class="fas fa-edit"></i>
+                        Редактировать
+                    </button>
+                    <button v-bind:class="{ 'disabled-button': (!entity.CadastralNumberOfLand || !entity.Name) }" v-else v-on:click="save()" type="button" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

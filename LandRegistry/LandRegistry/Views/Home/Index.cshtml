@@ -46,6 +46,7 @@
                 </span>
                 <nav class="table-nav" aria-label="Page navigation example">
                     <paginate :page-count="totalPages"
+                              v-model="currentPage"
                               :click-handler="changePage"
                               :prev-text="'След.'"
                               :next-text="'Пред.'"
@@ -93,13 +94,14 @@
     </div>
     <div class="right-block">
         <div class="row">
-            <div class="col-6">
+            <div class="col-3">
                 <h5>
                     <i class="fas fa-map-marked"></i> Карта
                 </h5>
             </div>
-            <div class="col-6 text-right">
+            <div class="col-9 text-right">
                 <div v-if="isDrawingEnabled">
+                    <strong>Теперь вы можете рисовать на карте</strong>
                     <span v-on:click="applyShape" v-if="shapeDrawn" class="btn btn-xs btn-success d-inline ml-2">
                         <i class="fas fa-check"></i>
                         Заполнить карточку

@@ -144,7 +144,7 @@ window.mapManagerMixIn = {
             var latlng = new google.maps.LatLng(55.7558, 37.6173);
             window.map = new google.maps.Map(document.getElementById('map-placeholder'), {
                 center: latlng,
-                zoom: 12
+                zoom: 10
             });
 
             var polyOptions = {

@@ -13,7 +13,8 @@
                 config: hasStoredConfig ? JSON.parse(localStorage.landsListColumnsConfig) : {
                     skip: 0,
                     take: 200
-                }
+                },
+                currentPage: 1
             }
         },
         methods: {
@@ -80,7 +81,7 @@
         },
         watch: {
             'config.take': function () {
-                this.search();
+                this.search(true);
             }
         },
         computed: {

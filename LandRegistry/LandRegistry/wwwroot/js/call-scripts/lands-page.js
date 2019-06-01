@@ -52,6 +52,12 @@
                 this.config.skip = (pageNumber - 1) * this.config.take;
                 this.search();
             },
+            overRow(id) {
+
+            },
+            outRow(id) {
+
+            },
             async search(reset) {
 
                 var params = {};

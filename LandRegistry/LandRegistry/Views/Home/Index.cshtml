@@ -74,7 +74,7 @@
             <div class="scroll-wrapper">
                 <table class="table table-sm table-striped table-bordered table-hover lands-table-body">
                     <tbody>
-                        <tr v-for="item in items">
+                        <tr v-on:mouseover="overRow(item.Id)"  v-on:mouseleave="outRow(item.Id)"  v-for="item in items">
                             <td class="land-number">{{ item.Id }}</td>
                             <td class="land-name">{{ item.Name }}</td>
                             <td class="land-type">

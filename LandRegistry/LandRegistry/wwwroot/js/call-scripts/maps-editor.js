@@ -112,8 +112,12 @@ window.mapManagerMixIn = {
             }
             window.map.fitBounds(foundShape.getBounds());
         },
-        setShapeColor(id, color,opacity) {
+        setShapeColor(id, color, opacity) {
             let foundShape = window.landShapes.filter(x => x.content === id)[0];
+            console.log("foundShape=" + foundShape);
+            if (!foundShape) {
+                return;
+            }
             foundShape.setOptions({ fillColor: color, fillOpacity: opacity });
         },
         setShapeFromCoordinates: function (name, triangleCoords, editable) {
@@ -122,22 +126,29 @@ window.mapManagerMixIn = {
             }
             let shape = new google.maps.Polygon({
                 paths: triangleCoords,
-                strokeColor: '#FF0000',
+                strokeColor: '#0000FF',
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
-                fillColor: '#FF0000',
+                fillColor: '#0000FF',
                 fillOpacity: 0.10,
                 editable: editable,
                 content: name
             });
             google.maps.event.addListener(shape, 'click', function (event) {
                 window.editLandModal.open(this.content);
+                window.landsPage.centeringShape(this.content);
             });
             google.maps.event.addListener(shape, "mouseover", function () {
-                this.setOptions({ fillColor: "#00FF00" });
+                if (landsPage.isDrawingEnabled) return;
+                this.setOptions({ fillColor: "#0000FF", fillOpacity: 0.7 });
+                landsPage.setHighlightedRow(shape.content, true);
+                landsPage.scrollToItem(shape.content);
             });
             google.maps.event.addListener(shape, "mouseout", function () {
-                this.setOptions({ fillColor: "#FF0000" });
+                if (editLandModal.visible) return;
+                if (landsPage.isDrawingEnabled) return;
+                this.setOptions({ fillColor: "#0000FF", fillOpacity: 0.1 });
+                landsPage.setHighlightedRow(shape.content, false);
             });
 
             shape.setMap(window.map);

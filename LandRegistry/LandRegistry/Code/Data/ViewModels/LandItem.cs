@@ -42,6 +42,8 @@ namespace LandRegistry.Code.Data.ViewModels
 
         public string Coordinates { get; set; }
 
+        public bool Active { get; set; }
+
         public List<LandTypeItem> AvaliableLandTypeItems { get; set; } = new List<LandTypeItem>();
         public List<LandRightTypeItem> AvaliableLandRightTypeItems { get; set; } = new List<LandRightTypeItem>();
     }

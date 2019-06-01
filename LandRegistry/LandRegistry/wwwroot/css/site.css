@@ -218,3 +218,7 @@ body.swal2-height-auto {
     pointer-events: none;
     opacity: 0.5;
 }
+
+.highlighted-row {
+    background-color: lightblue !important;
+}

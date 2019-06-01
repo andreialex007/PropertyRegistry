@@ -32,11 +32,16 @@
                 this.landId = landId;
                 this.readOnly = this.landId !== 0;
                 this.visible = true;
+
+                await utils.wait(100);
+                landsPage.setHighlightedRow(landId, true);
             },
             edit() {
                 this.readOnly = false;
             },
             close() {
+                landsPage.setHighlightedRow(this.entity.Id, false);
+                landsPage.setShapeColor(this.entity.Id, "#0000FF", 0.1);
                 this.visible = false;
                 landsPage.disableDrawing();
             },
@@ -52,6 +57,8 @@
                 window.landsPage.search();
                 this.close();
                 landsPage.disableDrawing();
+                landsPage.setShapeColor(result.Id, "#0000FF", 0.7);
+                landsPage.setHighlightedRow(result.Id, true);
             },
             async fileSelected(item) {
                 let result = await utils.getBase64(item.target.files[0]);

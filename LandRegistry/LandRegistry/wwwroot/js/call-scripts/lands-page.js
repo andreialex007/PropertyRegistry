@@ -24,9 +24,10 @@
             viewLand(id) {
                 this.centeringShape(id);
             },
-            editLand(id) {
-                this.centeringShape(id);
+            async editLand(id) {
                 editLandModal.open(id);
+                await utils.wait(200);
+                this.centeringShape(id);
             },
             async deleteLand(id) {
                 let result = await Swal.fire({
@@ -52,11 +53,29 @@
                 this.config.skip = (pageNumber - 1) * this.config.take;
                 this.search();
             },
+            setHighlightedRow(id, higlighted) {
+                let foundItem = this.items.filter(x => x.Id === id)[0];
+                if (!!foundItem)
+                    foundItem.Active = higlighted;
+            },
             overRow(id) {
-                this.setShapeColor(id, "#00FF00", 0.7);
+                this.setShapeColor(id, "#0000FF", 0.7);
+                this.setHighlightedRow(id, true);
             },
             outRow(id) {
-                this.setShapeColor(id, "#FF0000", 0.1);
+                if (!editLandModal.visible) {
+                    this.setShapeColor(id, "#0000FF", 0.1);
+                    this.setHighlightedRow(id, false);
+                }
+            },
+            scrollToItem(id) {
+                var rows = document.querySelectorAll('.lands-table-body tr');
+                let item = this.items.filter(x => x.Id === id)[0];
+                let line = this.items.indexOf(item);
+                rows[line].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
             },
             async search(reset) {
 

@@ -112,6 +112,10 @@ window.mapManagerMixIn = {
             }
             window.map.fitBounds(foundShape.getBounds());
         },
+        setShapeColor(id, color,opacity) {
+            let foundShape = window.landShapes.filter(x => x.content === id)[0];
+            foundShape.setOptions({ fillColor: color, fillOpacity: opacity });
+        },
         setShapeFromCoordinates: function (name, triangleCoords, editable) {
             if (editable === undefined) {
                 editable = true;
